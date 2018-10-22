@@ -9,10 +9,13 @@
 Ultrasonic ultrasonic(pino_trigger, pino_echo);
 
 bool start = false;
-btn = 6;
+int btn = 6;
 int valorArena = 1600;
-float diametroArena;
+float diametroArena = 75.0;
 int buzzer = 7;
+# define sensorD A1
+# define sensorE A2
+# define sensorTras A3
 
 void setup(){
     pinMode(buzzer,OUTPUT);
