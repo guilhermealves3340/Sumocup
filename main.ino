@@ -2,43 +2,129 @@
 #include <Ultrasonic.h>
  
 //Define os pinos para o trigger e echo
-#define pino_trigger 4
-#define pino_echo 5
+#define pino_trigger 9
+#define pino_echo 10
  
 //Inicializa o sensor nos pinos definidos acima
 Ultrasonic ultrasonic(pino_trigger, pino_echo);
 
-bool start = false;
-int btn = 6;
-int valorArena = 1600;
-float diametroArena = 75.0;
-int buzzer = 7;
+bool start = true;
+int valorArena = 1600;  // Valor limite para estar dentro da arena
+float diametroArena = 75.0; //diametro
+int buzzer = 11;
+int forca = 255;    // força dos motores trazeiros
+
+// Sentidos dos motores
+int HorarioD1 = 0;
+int HorarioD2 = 5;
+int AntiHorarioE1 = 2;
+int AntiHorarioE2 = 6;
+int AntiHorarioD1 = 3;
+int AntiHorarioD2 = 7;
+int HorarioE1 = 4;
+int HorarioE2 = 8;
+
+// Definindo os pinos para o sensores de refletancia
 # define sensorD A1
 # define sensorE A2
 # define sensorTras A3
+# define btn A4
+# define PWMD2 A5
+# define PWME2 A6
 
 void setup(){
     pinMode(buzzer,OUTPUT);
-    pinMode(btn, INPUT);
+
+    pinMode(HorarioD1,OUTPUT);
+    pinMode(AntiHorarioE1,OUTPUT);
+    pinMode(HorarioD2,OUTPUT);
+    pinMode(AntiHorarioE2,OUTPUT);
+    pinMode(HorarioE1,OUTPUT);
+    pinMode(AntiHorarioD1,OUTPUT);
+    pinMode(HorarioE2,OUTPUT);
+    pinMode(AntiHorarioD2,OUTPUT);
+    
+    while(start){
+        if(analogRead(btn) >= 200){
+            start = false;
+            tocarBuzzer();
+        }
+    }
 }
 
-void frente(){
+void GO(){
+    analogWrite(PWMD2, forca);
+    analogWrite(PWME2, forca);
 
+    // Direita
+    digitalWrite(AntiHorarioD2,0);
+    digitalWrite(AntiHorarioD1,0);
+    digitalWrite(HorarioD1,1);
+    digitalWrite(HorarioD2,1);
+
+    // Esquerda
+    digitalWrite(HorarioE1,0);
+    digitalWrite(HorarioE2,0);
+    digitalWrite(AntiHorarioE1,1);
+    digitalWrite(AntiHorarioE2,1);
 }
 
 void re(){
+    analogWrite(PWMD2, forca);
+    analogWrite(PWME2, forca);
 
+    // Direita
+    digitalWrite(AntiHorarioE1,0);
+    digitalWrite(AntiHorarioE2,0);
+    digitalWrite(HorarioE1,1);
+    digitalWrite(HorarioE2,1);
+
+    // Esquerda
+    digitalWrite(AntiHorarioE1,0);
+    digitalWrite(AntiHorarioE2,0);
+    digitalWrite(AntiHorarioD2,1);
+    digitalWrite(AntiHorarioD1,1);
 }
 
 void girarHorario(){
+    analogWrite(PWMD2, forca);
+    analogWrite(PWME2, forca);
+
+    // Direita
+    digitalWrite(HorarioD1,0);
+    digitalWrite(HorarioD2,0);
+    digitalWrite(AntiHorarioD1,1);
+    digitalWrite(AntiHorarioD2,1);
+
+    // Esquerda
+    digitalWrite(HorarioE1,0);
+    digitalWrite(HorarioE2,0);
+    digitalWrite(AntiHorarioE1,1);
+    digitalWrite(AntiHorarioE2,1);
 
 }
 
 void girarAntiHorario(){
+    analogWrite(PWMD2, forca);
+    analogWrite(PWME2, forca);
 
+    // Direita
+    digitalWrite(AntiHorarioD1,0);
+    digitalWrite(AntiHorarioD2,0);
+    digitalWrite(HorarioD1,1);
+    digitalWrite(HorarioD2,1);
+
+
+    // Esquerda
+    digitalWrite(AntiHorarioE1,0);
+    digitalWrite(AntiHorarioE2,0);
+    digitalWrite(HorarioE1,1);
+    digitalWrite(HorarioE2,1);
 }
 
 void procurar(){
+    re();
+    delay(150);
     while(ultrassonico() == false){
         girarHorario();
     }
@@ -46,12 +132,17 @@ void procurar(){
 
 void atacar(){
     while(ultrassonico() == true && olhos(true) < valorArena){
-        frente();
+        GO();
     }
 }
 
 void recuar(){
     re();
+    delay(500);
+}
+
+void recuar2(){
+    GO();
     delay(500);
 }
 
@@ -85,21 +176,18 @@ int olhos(bool i){
 }
 
 void loop(){
-    if(digitalRead(btn) == 1){
-        start = true;
+    if(olhos(true) > valorArena){
+        recuar();
     }
 
-    if(start == true){
-        tocarBuzzer();
-        while(olhos(true) < valorArena){
-            procurar();
-            atacar();
-        }
-
-        if(olhos(true)>valorArena){
-            recuar();
-        }
+    if(olhos(false) > 600){
+        recuar2();
     }
+
+    procurar();
+
+    atacar();
+
 }
 
 void tocarBuzzer(){
