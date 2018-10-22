@@ -11,7 +11,6 @@ Ultrasonic ultrasonic(pino_trigger, pino_echo);
 bool start = true;
 int valorArena = 1600;  // Valor limite para estar dentro da arena
 float diametroArena = 75.0; //diametro
-int buzzer = 11;
 int forca = 255;    // força dos motores trazeiros
 
 // Sentidos dos motores
@@ -33,8 +32,6 @@ int HorarioE2 = 8;
 # define PWME2 A6
 
 void setup(){
-    pinMode(buzzer,OUTPUT);
-
     pinMode(HorarioD1,OUTPUT);
     pinMode(AntiHorarioE1,OUTPUT);
     pinMode(HorarioD2,OUTPUT);
@@ -43,11 +40,12 @@ void setup(){
     pinMode(AntiHorarioD1,OUTPUT);
     pinMode(HorarioE2,OUTPUT);
     pinMode(AntiHorarioD2,OUTPUT);
+
     
+    delay(5000); // OBRIGATORIO PELAS REGRAS
     while(start){
-        if(analogRead(btn) >= 200){
+        if(analogRead(btn) >= 900){
             start = false;
-            tocarBuzzer();
         }
     }
 }
@@ -101,7 +99,6 @@ void girarHorario(){
     digitalWrite(HorarioE2,0);
     digitalWrite(AntiHorarioE1,1);
     digitalWrite(AntiHorarioE2,1);
-
 }
 
 void girarAntiHorario(){
@@ -124,9 +121,12 @@ void girarAntiHorario(){
 
 void procurar(){
     re();
-    delay(150);
+    delay(250);
     while(ultrassonico() == false){
         girarHorario();
+        delay(500);
+        girarAntiHorario();
+        delay(500);
     }
 }
 
@@ -138,12 +138,12 @@ void atacar(){
 
 void recuar(){
     re();
-    delay(500);
+    delay(800);
 }
 
 void recuar2(){
     GO();
-    delay(500);
+    delay(800);
 }
 
 bool ultrassonico(){
@@ -188,13 +188,4 @@ void loop(){
 
     atacar();
 
-}
-
-void tocarBuzzer(){
-    // Aciona o buzzer na frequencia relativa ao Dó em Hz
-    tone(buzzer,261);    
-    // Espera um tempo para Desativar
-    delay(200);
-    //Desativa o buzzer
-    noTone(buzzer); 
 }
