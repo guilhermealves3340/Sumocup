@@ -1,16 +1,22 @@
+/*
+
+    DIFERENCIAL: NO ATO DA PROCURA O ROBO PERCORRE DE PONTA A PONTA A ARENA E GIRANDO
+
+*/
+
 //Carrega a biblioteca do sensor ultrassonico
 #include <Ultrasonic.h>
  
 //Define os pinos para o trigger e echo
-#define pino_trigger 9
-#define pino_echo 10
+#define trigger 9
+#define echo 10
  
 //Inicializa o sensor nos pinos definidos acima
-Ultrasonic ultrasonic(pino_trigger, pino_echo);
+Ultrasonic ultrasonic(trigger, echo);
 
 bool start = true;
 int valorArena = 1600;  // Valor limite para estar dentro da arena
-float diametroArena = 75.0; //diametro
+float diametroArena = 77.0; //diametro
 int forca = 255;    // força dos motores trazeiros
 
 // Sentidos dos motores
@@ -123,12 +129,14 @@ void procurar(){
     re();
     delay(250);
     while(ultrassonico() == false){
+        while(olhos(true) < valorArena){
+            GO();
+        }
         girarHorario();
-        delay(500);
-        girarAntiHorario();
-        delay(500);
+        delay(250);
     }
 }
+
 
 void atacar(){
     while(ultrassonico() == true && olhos(true) < valorArena){
