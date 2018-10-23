@@ -3,6 +3,12 @@
         DIFERENCIAL: NO ATO DA PROCURA O ROBO DA UMA PEQUENA RÉ E DEPOIS FICA GIRANDO PRA DIREITA E PARA A ESQUEDA
         ATÉ ENCONTRAR O OPONENTE
 
+        ANALOGICOS:
+
+        A0 - OPTICO D1
+        A1 - OPTICO D2
+        A2 - OPTICO TRASEIRO
+
 
 */
 
@@ -10,8 +16,8 @@
 #include <Ultrasonic.h>
  
 //Define os pinos para o trigger e echo
-#define trigger 9
-#define echo 10
+#define trigger 12
+#define echo 13
  
 //Inicializa o sensor nos pinos definidos acima
 Ultrasonic ultrasonic(trigger, echo);
@@ -19,112 +25,89 @@ Ultrasonic ultrasonic(trigger, echo);
 bool start = true;
 int valorArena = 1600;  // Valor limite para estar dentro da arena
 float diametroArena = 77.0; //diametro
-int forca = 255;    // força dos motores trazeiros
-
-// Sentidos dos motores
-int HorarioD1 = 0;
-int HorarioD2 = 5;
-int AntiHorarioE1 = 2;
-int AntiHorarioE2 = 6;
-int AntiHorarioD1 = 3;
-int AntiHorarioD2 = 7;
-int HorarioE1 = 4;
-int HorarioE2 = 8;
 
 // Definindo os pinos para o sensores de refletancia
-# define sensorD A1
-# define sensorE A2
-# define sensorTras A3
-# define btn A4
-# define PWMD2 A5
-# define PWME2 A6
+#define sensorD A0
+#define sensorE A1
+#define sensorTras A7
+#define btn 1
 
-void setup(){
-    pinMode(HorarioD1,OUTPUT);
-    pinMode(AntiHorarioE1,OUTPUT);
-    pinMode(HorarioD2,OUTPUT);
-    pinMode(AntiHorarioE2,OUTPUT);
-    pinMode(HorarioE1,OUTPUT);
-    pinMode(AntiHorarioD1,OUTPUT);
-    pinMode(HorarioE2,OUTPUT);
-    pinMode(AntiHorarioD2,OUTPUT);
+int PWMA = ;
+int PWMB = ;
 
-    
+void setup(){ 
+    pinMode(PWMA,OUTPUT);
+    pinMode(PWMB,OUTPUT);
+
+    digitalWrite(PWMA,1);
+    digitalWrite(PWMB,1);
+
+    pinMode(1,INPUT);
+
+    pinMode(AIN1,OUTPUT);
+    pinMode(AIN2,OUTPUT);
+    pinMode(AH,OUTPUT);
+    pinMode(AA,OUTPUT);
+
+    pinMode(BH,OUTPUT);
+    pinMode(BA,OUTPUT);
+    pinMode(BIN1,OUTPUT);
+    pinMode(BIN2,OUTPUT);
+
     delay(5000); // OBRIGATORIO PELAS REGRAS
     while(start){
-        if(analogRead(btn) >= 900){
+        if(digitalRead(btn) == 1){
             start = false;
         }
     }
 }
 
 void GO(){
-    analogWrite(PWMD2, forca);
-    analogWrite(PWME2, forca);
+    digitalWrite(AIN1,0);
+    digitalWrite(AIN2,1);
+    digitalWrite(BIN1,1);
+    digitalWrite(BIN2,0);
 
-    // Direita
-    digitalWrite(AntiHorarioD2,0);
-    digitalWrite(AntiHorarioD1,0);
-    digitalWrite(HorarioD1,1);
-    digitalWrite(HorarioD2,1);
-
-    // Esquerda
-    digitalWrite(HorarioE1,0);
-    digitalWrite(HorarioE2,0);
-    digitalWrite(AntiHorarioE1,1);
-    digitalWrite(AntiHorarioE2,1);
+    digitalWrite(AH,0);
+    digitalWrite(AA,1);
+    digitalWrite(BH,1);
+    digitalWrite(BA,0);
 }
 
 void re(){
-    analogWrite(PWMD2, forca);
-    analogWrite(PWME2, forca);
+    digitalWrite(AIN1,1);
+    digitalWrite(AIN2,0);
+    digitalWrite(BIN1,0);
+    digitalWrite(BIN2,1);
 
-    // Direita
-    digitalWrite(AntiHorarioE1,0);
-    digitalWrite(AntiHorarioE2,0);
-    digitalWrite(HorarioE1,1);
-    digitalWrite(HorarioE2,1);
-
-    // Esquerda
-    digitalWrite(AntiHorarioE1,0);
-    digitalWrite(AntiHorarioE2,0);
-    digitalWrite(AntiHorarioD2,1);
-    digitalWrite(AntiHorarioD1,1);
+    digitalWrite(AH,1);
+    digitalWrite(AA,0);
+    digitalWrite(BH,0);
+    digitalWrite(BA,1);
 }
 
 void girarHorario(){
-    analogWrite(PWMD2, forca);
-    analogWrite(PWME2, forca);
+    digitalWrite(AIN1,0);
+    digitalWrite(AIN2,1);
+    digitalWrite(BIN1,0);
+    digitalWrite(BIN2,1);
 
-    // Direita
-    digitalWrite(HorarioD1,0);
-    digitalWrite(HorarioD2,0);
-    digitalWrite(AntiHorarioD1,1);
-    digitalWrite(AntiHorarioD2,1);
-
-    // Esquerda
-    digitalWrite(HorarioE1,0);
-    digitalWrite(HorarioE2,0);
-    digitalWrite(AntiHorarioE1,1);
-    digitalWrite(AntiHorarioE2,1);
+    digitalWrite(AH,0);
+    digitalWrite(AA,1);
+    digitalWrite(BH,0);
+    digitalWrite(BA,1);
 }
 
 void girarAntiHorario(){
-    analogWrite(PWMD2, forca);
-    analogWrite(PWME2, forca);
+    digitalWrite(AIN1,1);
+    digitalWrite(AIN2,0);
+    digitalWrite(BIN1,1);
+    digitalWrite(BIN2,0);
 
-    // Direita
-    digitalWrite(AntiHorarioD1,0);
-    digitalWrite(AntiHorarioD2,0);
-    digitalWrite(HorarioD1,1);
-    digitalWrite(HorarioD2,1);
-
-
-    // Esquerda
-    digitalWrite(AntiHorarioE1,0);
-    digitalWrite(AntiHorarioE2,0);
-    digitalWrite(HorarioE1,1);
-    digitalWrite(HorarioE2,1);
+    digitalWrite(AH,1);
+    digitalWrite(AA,0);
+    digitalWrite(BH,1);
+    digitalWrite(BA,0);
 }
 
 void procurar(){
