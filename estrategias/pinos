@@ -1,0 +1,54 @@
+#define sensorD A0
+#define sensorE A1
+#define sensorTras A2
+#define btn 1
+
+#define PWMA 3
+#define PWMB 5 
+
+#define FrenteHorarioEsquerdo 4 // AIN1
+#define FrenteAntiHorarioEsquerdo 2 // AIN2
+#define TraseiroEsquerdoAntiHorario 8// BIN1 8
+#define TraseiroEsquerdoHorario 7
+#define TraseiroDireitoHorario 10
+#define TraseiroDireitoAntiHorario 11
+#define BA 9
+#define BH 6
+
+void setup(){ 
+    pinMode(PWMA,OUTPUT);
+    pinMode(PWMB,OUTPUT);
+
+    digitalWrite(PWMA,1);
+    digitalWrite(PWMB,1);
+
+    pinMode(1,INPUT);
+
+    pinMode(FrenteHorarioEsquerdo,OUTPUT);
+    pinMode(FrenteAntiHorarioEsquerdo,OUTPUT);
+    pinMode(TraseiroDireitoHorario,OUTPUT);
+    pinMode(TraseiroDireitoAntiHorario,OUTPUT);
+
+    pinMode(BH,OUTPUT);
+    pinMode(BA,OUTPUT);
+    pinMode(TraseiroEsquerdoAntiHorario,OUTPUT);
+    pinMode(TraseiroEsquerdoHorario,OUTPUT);
+
+   /* while(start){
+        if(digitalRead(btn) == 1){
+            start = false;
+        }
+    }*/
+    delay(1000); // OBRIGATORIO PELAS REGRAS
+}
+void loop(){
+  digitalWrite(FrenteHorarioEsquerdo,0);
+    digitalWrite(FrenteAntiHorarioEsquerdo,0);
+    digitalWrite(TraseiroEsquerdoAntiHorario,0);
+    digitalWrite(TraseiroEsquerdoHorario,0); //
+
+    digitalWrite(TraseiroDireitoHorario,0);
+    digitalWrite(TraseiroDireitoAntiHorario,0);
+    digitalWrite(BH,0);
+    digitalWrite(BA,1);
+}

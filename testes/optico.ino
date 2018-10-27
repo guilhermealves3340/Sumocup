@@ -17,5 +17,5 @@ void loop(){
     Serial.println(analogRead(opticoTras));
 
     Serial.println(" ");
-    delay(500);
+    delay(1000);
 }

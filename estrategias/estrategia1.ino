@@ -23,17 +23,26 @@
 Ultrasonic ultrasonic(trigger, echo);
 
 bool start = true;
-int valorArena = 1600;  // Valor limite para estar dentro da arena
+//int valorArena = 1600;  // Valor limite para estar dentro da arena
 float diametroArena = 77.0; //diametro
 
 // Definindo os pinos para o sensores de refletancia
 #define sensorD A0
 #define sensorE A1
-#define sensorTras A7
+#define sensorTras A2
 #define btn 1
 
-int PWMA = ;
-int PWMB = ;
+#define PWMA 3
+#define PWMB 5 
+
+#define AIN1 4
+#define AIN2 2
+#define BIN1 8
+#define BIN2 7
+#define AH 10
+#define AA 11
+#define BA 7
+#define BH 8
 
 void setup(){ 
     pinMode(PWMA,OUTPUT);
@@ -54,15 +63,15 @@ void setup(){
     pinMode(BIN1,OUTPUT);
     pinMode(BIN2,OUTPUT);
 
-    delay(5000); // OBRIGATORIO PELAS REGRAS
-    while(start){
+   /* while(start){
         if(digitalRead(btn) == 1){
             start = false;
         }
-    }
+    }*/
+    delay(4500); // OBRIGATORIO PELAS REGRAS
 }
 
-void GO(){
+void re(){
     digitalWrite(AIN1,0);
     digitalWrite(AIN2,1);
     digitalWrite(BIN1,1);
@@ -74,7 +83,7 @@ void GO(){
     digitalWrite(BA,0);
 }
 
-void re(){
+void GO(){
     digitalWrite(AIN1,1);
     digitalWrite(AIN2,0);
     digitalWrite(BIN1,0);
@@ -122,7 +131,7 @@ void procurar(){
 }
 
 void atacar(){
-    while(ultrassonico() == true && olhos(true) < valorArena){
+    while(ultrassonico() == true && olhos(true) == false){
         GO();
     }
 }
@@ -152,26 +161,25 @@ bool ultrassonico(){
     }
 }
 
-int olhos(bool i){
-    int x;
+bool olhos(bool i){
+    int x1 = analogRead(sensorD);
+    int x2 = analogRead(sensorE);
+    int x3 = analogRead(sensorTras);
     if(i == true){
-        int frenteD = digitalRead(sensorD);
-        int frenteE = digitalRead(sensorE);
-        x = frenteD + frenteE;
+        if(sensorD < 200 || sensorE < 200 || sensorTras < 200){
+            return false;
+        }
     }
     else{
-        int x = digitalRead(sensorTras);
-    }
-
-    return x;
-}
+        return true;
+}}
 
 void loop(){
-    if(olhos(true) > valorArena){
+    if(olhos(true) == false){
         recuar();
     }
 
-    if(olhos(false) > 600){
+    if(olhos(false) == false){
         recuar2();
     }
 
